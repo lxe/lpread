@@ -1,5 +1,9 @@
 opencv-python
 transformers
-# torch
+torch
 timm
-pytesseract
+Pillow
+'transformers[torch]'
+evaluate
+scikit-learn
+scipy
