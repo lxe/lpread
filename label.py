@@ -40,10 +40,10 @@ def update_label():
         data = []
         with open('plates.csv', 'r', newline='') as csvfile:
             reader = csv.reader(csvfile)
-            data = [row for row in reader if row[0] != f'static/plates/{filename}']
+            data = [row for row in reader if row[0] != f'plates/{filename}']
         
         # Append the new/updated label
-        data.append([f'static/plates/{filename}', label])
+        data.append([f'plates/{filename}', label])
         
         # Write updated data back to the CSV
         with open('plates.csv', 'w', newline='') as csvfile:
