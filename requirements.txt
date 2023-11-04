@@ -7,3 +7,5 @@ Pillow
 evaluate
 scikit-learn
 scipy
+natsort
+flask

@@ -10,9 +10,9 @@ def load_labels():
     labels = {}
     try:
         with open('plates.csv', 'r', newline='') as csvfile:
-            reader = csv.reader(csvfile)
+            reader = csv.DictReader(csvfile)
             for row in reader:
-                labels[row[0]] = row[1]
+                labels[row['file_name']] = row['text']
     except FileNotFoundError:
         pass
     return labels
@@ -35,19 +35,23 @@ def update_label():
     if request.method == 'POST':
         filename = request.form['filename']
         label = request.form['label']
+        file_exists = os.path.isfile('plates.csv')
         
         # Read existing data
         data = []
-        with open('plates.csv', 'r', newline='') as csvfile:
-            reader = csv.reader(csvfile)
-            data = [row for row in reader if row[0] != f'plates/{filename}']
+        if file_exists:
+            with open('plates.csv', 'r', newline='') as csvfile:
+                reader = csv.DictReader(csvfile)
+                data = [row for row in reader if row['file_name'] != f'plates/{filename}']
         
         # Append the new/updated label
-        data.append([f'plates/{filename}', label])
+        data.append({'file_name': f'plates/{filename}', 'text': label})
         
-        # Write updated data back to the CSV
+        # Write updated data back to the CSV, preserving the header
         with open('plates.csv', 'w', newline='') as csvfile:
-            writer = csv.writer(csvfile)
+            fieldnames = ['file_name', 'text']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writeheader()
             writer.writerows(data)
         
     return '', 204
